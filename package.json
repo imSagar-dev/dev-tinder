@@ -1,0 +1,23 @@
+{
+  "name": "dev-tinder",
+  "version": "1.0.0",
+  "description": "tinder for devs",
+  "main": "index.js",
+  "scripts": {
+    "start":"node src/app.js",
+    "dev":"nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imSagar-dev/dev-tinder.git"
+  },
+  "author": "sagar deshmukh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imSagar-dev/dev-tinder/issues"
+  },
+  "homepage": "https://github.com/imSagar-dev/dev-tinder#readme",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

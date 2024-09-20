@@ -1,7 +1,7 @@
-A "Tinder-like" community for developers would be a platform designed to match developers with potential collaborators, projects, or even mentors. Here's a detailed description of how it could work:
+This platform designed to match developers with potential collaborators, projects, or even mentors. Here's a detailed description of how it could work:
 
 ### **Platform Overview:**
-- **Name:** DevMatch (or any catchy name)
+- **Name:** Dev-tinder OR DevMatch 
 - **Purpose:** To connect developers based on their skills, interests, and project needs in a simple, swipe-based interface, similar to how Tinder matches people. The community could also foster collaboration, networking, and mentorship in the tech world.
 
 ### **Key Features:**

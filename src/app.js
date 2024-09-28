@@ -9,12 +9,10 @@ const { adminAuth } = require("./middleware/auth");
 const connectDB = require("./config/database");
 
 // import models
-const userModel = require("./models/user.schema");
+const User = require("./models/user.schema");
 
-// to handle request body
-app.use(express.json())
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
+// middleware to handle request body
+app.use(express.json());
 
 connectDB()
   .then(() => {
@@ -26,43 +24,58 @@ connectDB()
   .catch((err) => {
     console.log("DB not connected !!");
   });
+ 
+app.post("/signup", async (req, res) => {
+  const user = new User(req.body);
+  try {
+    const resp = await user.save();
+    res.json(resp);
+  } catch (error) {
+    res.send(error.message)
+  }
 
-// app.post("/user", adminAuth, async (req, res) => {
-//   const user = new userModel({
-//     firstName: "pratik",
-//     lastName: "deshmukh",
-//     mobileNumber: 9850950375,
-//     email: "pratik.d@gmail.com",
-//     age: 27,
-//     gnder: "male",
-//   });
 
-//   const resp = await user.save();
-//   res.json(resp);
-// });
-
-app.post("/signup", async(req, res) => {
-  const user = new userModel(req.body);
-  const resp = await user.save();
-  res.json(resp)
 });
 
-app.get("/user", adminAuth, async (req, res) => {
-  const user = await userModel.find();
+app.get("/feed", adminAuth, async (req, res) => {
+  const user = await User.find();
   res.send(user);
 });
 
 app.patch("/user", adminAuth, async (req, res) => {
-    try {
-        await userModel.findOneAndUpdate({age:34},req.body);
-        res.send("User updated successfully !!!");
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-    
-   
-  });
-  
+  try {
+    await User.findOneAndUpdate({ email: req.body.email }, req.body,{after:true,runValidators:true});
+    res.send("User updated successfully !!!");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+app.get("/user", adminAuth, async (req, res) => {
+  try {
+   const user =  await User.findOne({ email: req.body.email });
+   if(!user){
+    res.status(404).send('User not found')
+   }else{
+    res.send(user)
+   }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+app.delete("/user", adminAuth, async (req, res) => {
+  try {
+   const user =  await User.findOneAndDelete({ email: req.body.email });
+   if(!user){
+    res.status(404).send('User not found')
+   }else{
+    res.send("user deleted successfully !!!")
+   }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 
 // app.get('/test',(req,res,next)=>{
 //     // res.send('Hello from test')

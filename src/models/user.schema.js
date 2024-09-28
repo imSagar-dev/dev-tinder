@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const validator = require('validator');
 const userSchema = mongoose.Schema({
   firstName: {
     type: String,
@@ -32,7 +32,15 @@ const userSchema = mongoose.Schema({
     type: String,
     validate(value){
       if(!['male','female','other'].includes(value.toLowerCase())){
-        throw Error('Invalid gender')
+        throw new Error('Invalid gender')
+      }
+    }
+  },
+  profileImage:{
+    type:String,
+    validate(value){
+      if(!validator.isURL(value)){
+        throw new Error('Invalid profile image URL: '+value)
       }
     }
   }

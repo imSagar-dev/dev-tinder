@@ -2,6 +2,8 @@
 const express = require("express");
 const app = express();
 
+//import external libs
+const validator = require('validator');
 //middleware creation
 const { adminAuth } = require("./middleware/auth");
 
@@ -28,6 +30,14 @@ connectDB()
 app.post("/signup", async (req, res) => {
   const user = new User(req.body);
   try {
+    const PERMITTED_BODY = ["firstName","lastName","email","mobileNumber","age","gender","profileImage"];
+    if(!Object.keys(req.body).every(k=>PERMITTED_BODY.includes(k))){
+      throw new Error("Invalid request body");
+    }
+
+    if(!validator.isEmail(req.body?.email)){
+      throw new Error("Invalid email id");
+    }
     const resp = await user.save();
     res.json(resp);
   } catch (error) {

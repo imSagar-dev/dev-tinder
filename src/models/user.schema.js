@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require('validator');
+const {decryption} = require('../utils/encrypt-decrypt');
+
 const userSchema = mongoose.Schema({
   firstName: {
     type: String,
@@ -28,6 +30,10 @@ const userSchema = mongoose.Schema({
   age: {
     type: Number,
   },
+  aboutMe:{
+    type:String,
+    default:"This is default About me "
+  },
   gender: {
     type: String,
     validate(value){
@@ -43,8 +49,23 @@ const userSchema = mongoose.Schema({
         throw new Error('Invalid profile image URL: '+value)
       }
     }
+  },
+  password:{
+    type:String,
+    required:true,
+    validate(value){
+      if(!validator.isStrongPassword(value)){
+        throw new Error("password should be strong");
+      }
+    }
   }
 },{timestamps:true});
 
+
+userSchema.methods.validatePassword= async function(password){
+  const user = this;
+  const isValid  = await decryption(password, user.password);
+  return isValid;
+}
 const userModel = mongoose.model("User", userSchema);
 module.exports = userModel;

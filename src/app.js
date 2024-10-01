@@ -6,11 +6,12 @@ const app = express();
 const connectDB = require("./config/database");
 //import routes index
 const router = require('./routes');
+const cors = require('cors');
 
 // middleware to handle request body
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(cors({credentials:true , domain: 'http://localhost:5137'}))
 app.use('',router);
 connectDB()
   .then(() => {

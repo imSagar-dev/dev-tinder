@@ -4,6 +4,7 @@ const authController = express.Router();
 //import utils
 const { signupValidate, validateLoginBody ,validateChangePasswordBody} = require("../utils/validations");
 const { encryption, decryption } = require("../utils/encrypt-decrypt");
+const {response} = require("../utils/responseUtil");
 //middleware creation
 const { userAuth } = require("../middleware/auth");
 //import external library
@@ -61,10 +62,12 @@ authController.post("/signup", async (req, res) => {
         //create JWT token
         const token = jwt.sign({ id: user._id }, "secret@123");
         res.cookie("token", token);
-        res.json({ message: "Login Success !!!" });
+        const {firstName , lastName , profileImage , email} = user;
+        // res.json({ message: "Login Success !!!" });
+        return response(res,200,{firstName , lastName , profileImage , email} , "Login successful");
       }
     } catch (error) {
-      res.status(400).send(error.message);
+      return response(res,400,null , error.message);
     }
   });
 
